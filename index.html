@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Поиск музыки</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    input { padding: 10px; width: 80%; margin-bottom: 10px; }
+    button { padding: 10px 20px; }
+    #results { margin-top: 20px; }
+    p { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h2>Найди музыку 🎶</h2>
+  <input id="query" type="text" placeholder="Введите название трека">
+  <button onclick="searchMusic()">Искать</button>
+  <div id="results"></div>
+
+  <script>
+    async function searchMusic() {
+      let query = document.getElementById("query").value;
+      if (!query) return;
+
+      // бесплатный API iTunes
+      let res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&limit=5`);
+      let data = await res.json();
+
+      let out = data.results.map(
+        track => `<p><b>${track.artistName}</b> - ${track.trackName}</p>`
+      ).join("");
+
+      document.getElementById("results").innerHTML = out || "Ничего не найдено";
+    }
+  </script>
+</body>
+</html>
